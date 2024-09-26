@@ -48,12 +48,13 @@ class Snake {
 		ctx.fillStyle = "green";
 		ctx.beginPath();
 		for(var i=0; i<this.head; i++) {
-			ctx.fillRect(this.body[i].x*scale, this.body[i].y*scale, scale, scale);
+			ctx.rect((this.body[i].x << 3) + (this.body[i].x << 1), (this.body[i].y << 3) + (this.body[i].y << 1), scale, scale); //Value of scale is used in bitshifting
 			if(i<this.head) {
 				this.body[i].x = this.body[i+1].x;
 				this.body[i].y = this.body[i+1].y;
 			} 
 		}
+		ctx.fill();
 	}
 
 	grow() {
@@ -62,20 +63,21 @@ class Snake {
 		scorewindow.innerHTML = (this.head-3)*10;
                 
 	}
-    gameover() {
-                for(let j=0;j<(this.head-3);j++)
-                    {
-                     let part=this.body[j];
-                     let head=this.body[this.head];
-                     if((part.x===head.x)&&(part.y===head.y))
-                     {
-                    clearInterval(Interval);
-					over=true;
-                    game.innerHTML ="GAME OVER";
-					ctx.fillStyle="white";
-                    ctx.font="40px verdana";
-                    ctx.fillText("Press Enter", width/4.5, height/2);
-                     }}
+    	gameover() {
+                for(let j=0; j<(this.head-3); j++)
+                {
+			let part=this.body[j];
+			let head=this.body[this.head];
+			if((part.x===head.x)&&(part.y===head.y))
+			{
+				clearInterval(Interval);
+				over=true;
+				game.innerHTML ="GAME OVER";
+				ctx.fillStyle="white";
+				ctx.font="40px verdana";
+				ctx.fillText("Press Enter", width/4.5, height/2);
+			}
+		}
         }
 }
 
@@ -87,7 +89,7 @@ class Food {
 	draw() {
 		ctx.beginPath();
                 ctx.fillStyle = "blue";
-		ctx.fillRect(this.x * scale, this.y * scale, scale, scale);
+		ctx.fillRect((this.x << 3) + (this.x << 1), (this.y << 3) + (this.y << 1), scale, scale); //Value of scale is used for bitshifting
 	}	
 }
 
@@ -106,8 +108,7 @@ document.addEventListener("keydown", (event) => {
 		case 'A':
                 case 'ArrowLeft':
                         if((snake.xspeed == 1)&&(snake.yspeed == 0))
-                        {
-                         break;}
+                      		break;
 			snake.yspeed = 0;
 			snake.xspeed = -1;
 			break;
@@ -115,8 +116,7 @@ document.addEventListener("keydown", (event) => {
 		case 'D':
                 case 'ArrowRight':
                         if((snake.xspeed == -1)&&(snake.yspeed == 0))
-                        {
-                         break;}
+				break;
 			snake.yspeed = 0;
 			snake.xspeed = 1;
 			break;
@@ -124,8 +124,7 @@ document.addEventListener("keydown", (event) => {
 		case 'W':
                 case 'ArrowUp':
                         if((snake.xspeed == 0)&&(snake.yspeed == 1))
-                        {
-                         break;}
+				break;
 			snake.xspeed = 0;
 			snake.yspeed = -1;
 			break;
@@ -133,8 +132,7 @@ document.addEventListener("keydown", (event) => {
 		case 'S':
                 case 'ArrowDown':
                         if((snake.xspeed == 0)&&(snake.yspeed == -1))
-                        {
-                         break;}
+				break;
 			snake.xspeed = 0;
 			snake.yspeed = 1;
 			break;
@@ -155,6 +153,6 @@ Interval=setInterval(()=>{
 	snake.update();
 	snake.draw();
 	food.draw();
-    snake.gameover();
+    	snake.gameover();
         
 }, 120);
